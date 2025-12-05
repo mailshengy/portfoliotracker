@@ -28,7 +28,6 @@
         background: var(--bg);
         color: var(--text);
         line-height: 1.6;
-        /* Prevent scroll when mobile menu is open */
         overflow-x: hidden;
       }
       body.nav-open {
@@ -67,7 +66,7 @@
         font-weight: 700;
         display: flex;
         align-items: center;
-        z-index: 102; /* Above mobile menu overlay */
+        z-index: 102;
       }
       .logo span {
         padding: 3px 8px;
@@ -78,8 +77,6 @@
         color: var(--accent-dark);
         white-space: nowrap;
       }
-
-      /* Desktop Nav Links */
       .nav-links {
         display: flex;
         gap: 25px;
@@ -89,7 +86,7 @@
         font-weight: 500;
       }
 
-      /* Hamburger Menu (Hidden on Desktop) */
+      /* Hamburger Menu */
       .hamburger {
         display: none;
         cursor: pointer;
@@ -112,12 +109,10 @@
       .hamburger span:nth-child(2) { top: 9px; }
       .hamburger span:nth-child(3) { top: 18px; }
 
-      /* Active Hamburger State */
       .hamburger.active span:nth-child(1) { transform: rotate(45deg); top: 9px; }
       .hamburger.active span:nth-child(2) { opacity: 0; }
       .hamburger.active span:nth-child(3) { transform: rotate(-45deg); top: 9px; }
 
-      /* Mobile Overlay */
       .mobile-overlay {
         position: fixed;
         top: 0; left: 0;
@@ -129,10 +124,7 @@
         transition: opacity 0.3s ease;
         backdrop-filter: blur(2px);
       }
-      .mobile-overlay.active {
-        opacity: 1;
-        pointer-events: all;
-      }
+      .mobile-overlay.active { opacity: 1; pointer-events: all; }
 
       /* --- MAIN LAYOUT --- */
       main {
@@ -140,7 +132,6 @@
         margin: 0 auto;
         padding: 24px 20px 60px;
       }
-      
       section { margin-top: 40px; }
       section h2 {
         font-size: 1rem;
@@ -158,7 +149,7 @@
         margin-left: 13px;
       }
 
-      /* --- HERO SECTION --- */
+      /* --- HERO --- */
       .hero {
         display: grid;
         grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
@@ -189,6 +180,15 @@
         display: inline-block;
         margin-bottom: 20px;
       }
+      .status-dot {
+        height: 8px; width: 8px; 
+        background-color: #ccc; 
+        border-radius: 50%; 
+        display: inline-block; 
+        margin-right: 5px;
+      }
+      .status-dot.live { background-color: var(--positive); box-shadow: 0 0 4px var(--positive); }
+      
       .chart-container {
         background: #fff;
         padding: 20px;
@@ -198,14 +198,10 @@
         height: 350px;
         width: 100%;
       }
-      canvas {
-        max-width: 100%;
-        max-height: 100%;
-      }
+      canvas { max-width: 100%; max-height: 100%; }
 
-      /* --- GRIDS & CARDS --- */
+      /* --- CARDS --- */
       .grid { display: grid; gap: 16px; }
-      
       .card {
         background: var(--card);
         padding: 18px;
@@ -216,204 +212,54 @@
         justify-content: space-between;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
-      .card:hover { 
-        transform: translateY(-2px); 
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06); 
-      }
-      
-      .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 8px;
-      }
-      .card-label {
-        font-size: 0.65rem;
-        text-transform: uppercase;
-        letter-spacing: 0.16em;
-        color: var(--muted);
-      }
-      .yield-pill {
-        background: #f0f7f2;
-        color: var(--positive);
-        font-size: 0.7rem;
-        padding: 3px 8px;
-        border-radius: 4px;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-      }
-      .card-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--text);
-      }
-      .card-ticker {
-        font-size: 0.8rem;
-        color: var(--accent-dark);
-        font-family: monospace;
-        margin-bottom: 12px;
-      }
-      .data-row {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.85rem;
-        margin-bottom: 6px;
-        border-bottom: 1px dashed #eee;
-        padding-bottom: 4px;
-      }
+      .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+      .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+      .card-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); }
+      .yield-pill { background: #f0f7f2; color: var(--positive); font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; font-weight: 600; letter-spacing: 0.05em; }
+      .card-title { font-size: 1.1rem; font-weight: 600; color: var(--text); }
+      .card-ticker { font-size: 0.8rem; color: var(--accent-dark); font-family: monospace; margin-bottom: 12px; }
+      .data-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; border-bottom: 1px dashed #eee; padding-bottom: 4px; }
       .data-row:last-child { border-bottom: none; }
       .data-label { color: var(--muted); }
       .data-val { font-weight: 500; }
-      
-      .tsla-card {
-        background: linear-gradient(145deg, #ffffff 0%, #fcfbf9 100%);
-        border: 1px solid var(--accent);
-      }
-      .cpf-card {
-        border-left: 6px solid var(--cpf-green);
-      }
-      .converted-val {
-        font-size: 0.7rem;
-        color: var(--muted);
-        display: block;
-        text-align: right;
-      }
-      
-      .card-list {
-        list-style: none;
-        margin-top: 10px;
-        font-size: 0.8rem;
-        color: var(--muted);
-        border-top: 1px solid #f0f0f0;
-        padding-top: 10px;
-      }
-      .card-list li {
-        margin-bottom: 6px;
-        padding-left: 14px;
-        position: relative;
-      }
-      .card-list li::before {
-        content: "•";
-        color: var(--accent);
-        position: absolute;
-        left: 0;
-      }
+      .tsla-card { background: linear-gradient(145deg, #ffffff 0%, #fcfbf9 100%); border: 1px solid var(--accent); }
+      .cpf-card { border-left: 6px solid var(--cpf-green); }
+      .converted-val { font-size: 0.7rem; color: var(--muted); display: block; text-align: right; }
+      .card-list { list-style: none; margin-top: 10px; font-size: 0.8rem; color: var(--muted); border-top: 1px solid #f0f0f0; padding-top: 10px; }
+      .card-list li { margin-bottom: 6px; padding-left: 14px; position: relative; }
+      .card-list li::before { content: "•"; color: var(--accent); position: absolute; left: 0; }
 
       /* --- MODAL --- */
-      .settings-section {
-        margin-top: 60px;
-        text-align: center;
-        padding-top: 20px;
-        border-top: 1px solid #e0e0e0;
-      }
-      .btn-outline {
-        background: transparent;
-        border: 1px solid var(--accent-dark);
-        color: var(--accent-dark);
-        padding: 12px 24px;
-        border-radius: 999px;
-        cursor: pointer;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        font-size: 0.8rem;
-        transition: all 0.2s;
-      }
-      .btn-outline:hover {
-        background: var(--accent-dark);
-        color: #fff;
-      }
-      .modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.5);
-        backdrop-filter: blur(4px);
-        z-index: 200;
-        justify-content: center;
-        align-items: center;
-      }
-      .modal-content {
-        background: #fff;
-        padding: 30px;
-        border-radius: 14px;
-        width: 90%;
-        max-width: 500px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        max-height: 90vh;
-        overflow-y: auto;
-      }
-      .modal-title {
-        font-size: 1.2rem;
-        margin-bottom: 20px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 10px;
-      }
-      .form-group {
-        margin-bottom: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .form-group label {
-        font-size: 0.9rem;
-        color: var(--muted);
-      }
-      .form-group input {
-        padding: 8px 12px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        width: 120px;
-        text-align: right;
-        font-size: 1rem;
-      }
-      .modal-actions {
-        margin-top: 25px;
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-      }
+      .settings-section { margin-top: 60px; text-align: center; padding-top: 20px; border-top: 1px solid #e0e0e0; }
+      .btn-outline { background: transparent; border: 1px solid var(--accent-dark); color: var(--accent-dark); padding: 12px 24px; border-radius: 999px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; transition: all 0.2s; }
+      .btn-outline:hover { background: var(--accent-dark); color: #fff; }
+      .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; justify-content: center; align-items: center; }
+      .modal-content { background: #fff; padding: 30px; border-radius: 14px; width: 90%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+      .modal-title { font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+      .form-group { margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+      .form-group label { font-size: 0.9rem; color: var(--muted); }
+      .form-group input { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; width: 120px; text-align: right; font-size: 1rem; }
+      .modal-actions { margin-top: 25px; display: flex; justify-content: flex-end; gap: 10px; }
       .btn-save { background: var(--accent-dark); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; }
       .btn-cancel { background: #eee; color: #333; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; }
 
-      /* --- MEDIA QUERIES (RESPONSIVENESS) --- */
+      /* --- RESPONSIVENESS --- */
       @media (min-width: 769px) {
         .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
-
       @media (max-width: 768px) {
         .hamburger { display: block; }
-        
-        /* Navigation Drawer */
         .nav-links {
-          position: fixed;
-          top: 0;
-          right: 0;
-          height: 100vh;
-          width: 75%;
-          max-width: 300px;
-          background: #fff;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 40px;
-          box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-          transform: translateX(100%);
-          transition: transform 0.3s ease-in-out;
-          z-index: 101;
-          font-size: 1.2rem;
+          position: fixed; top: 0; right: 0; height: 100vh; width: 75%; max-width: 300px;
+          background: #fff; flex-direction: column; align-items: center; justify-content: center;
+          gap: 40px; box-shadow: -5px 0 20px rgba(0,0,0,0.1); transform: translateX(100%);
+          transition: transform 0.3s ease-in-out; z-index: 101; font-size: 1.2rem;
         }
-        .nav-links.active {
-          transform: translateX(0);
-        }
-
+        .nav-links.active { transform: translateX(0); }
         .hero { grid-template-columns: 1fr; gap: 20px; }
         .chart-container { order: -1; height: 320px; }
-        
-        /* Make cards full width on mobile */
         .grid-3, .grid-2 { grid-template-columns: 1fr; }
-        
         main { padding: 20px 15px 50px; }
       }
     </style>
@@ -423,16 +269,10 @@
 
     <header>
       <nav class="nav">
-        <div class="logo">
-          PORTFOLIO <span>Live Dashboard</span>
-        </div>
-        
+        <div class="logo">PORTFOLIO <span>Live Dashboard</span></div>
         <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
-          <span></span>
-          <span></span>
-          <span></span>
+          <span></span><span></span><span></span>
         </button>
-
         <div class="nav-links" id="navLinks">
           <a href="#summary" onclick="toggleMobileMenu()">Summary</a>
           <a href="#growth" onclick="toggleMobileMenu()">Growth</a>
@@ -446,11 +286,12 @@
       <section class="hero" id="summary">
         <div class="hero-text">
           <h1>Portfolio Tracking</h1>
-          <span class="total-wealth" id="total-wealth-display">Calculating...</span>
-          <span class="exchange-rate">USD/SGD: 1.296 (Live)</span>
-          <p>
-            Real-time valuation of US Tech Growth, Singapore Banking Dividends, Cash Reserves, and CPF Special Account.
-          </p>
+          <span class="total-wealth" id="total-wealth-display">Fetching...</span>
+          <span class="exchange-rate">
+            <span class="status-dot" id="status-dot"></span>
+            USD/SGD: <span id="fx-rate-display">...</span>
+          </span>
+          <p>Real-time valuation of US Tech Growth, Singapore Banking Dividends, Cash Reserves, and CPF Special Account.</p>
         </div>
         <div class="chart-container">
           <canvas id="portfolioChart"></canvas>
@@ -459,9 +300,7 @@
 
       <section id="growth">
         <h2>Portfolio Growth (Quarterly)</h2>
-        <p class="section-intro">
-          Historical valuation of current assets from Jan 2022 to Dec 2025.
-        </p>
+        <p class="section-intro">Historical valuation of current assets from Jan 2022 to Dec 2025.</p>
         <div class="chart-container" style="height: 300px;">
           <canvas id="growthChart"></canvas>
         </div>
@@ -470,170 +309,71 @@
       <section id="equities">
         <h2>Equity Holdings</h2>
         <p class="section-intro">
-          <strong>(CAGR)</strong> = Compound Annual Growth Rate since Nov 2021. <br>
+          <strong>(CAGR)</strong> = Compound Annual Growth Rate. <br>
           <strong>Abs. Return</strong> = Total percentage gain/loss on initial capital.
         </p>
         
         <div class="grid grid-3">
           <article class="card tsla-card">
-            <div class="card-header">
-              <span class="card-label">High Growth</span>
-              <span class="yield-pill" id="tsla-yield">--</span>
-            </div>
+            <div class="card-header"><span class="card-label">High Growth</span><span class="yield-pill" id="tsla-yield">--</span></div>
             <div class="card-title">Tesla Inc.</div>
             <div class="card-ticker">TSLA (NASDAQ)</div>
-            <div class="data-row">
-              <span class="data-label">Holdings</span>
-              <span class="data-val" id="tsla-qty">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Market Price</span>
-              <span class="data-val" id="tsla-price">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Total Value</span>
-              <div style="text-align:right">
-                <span class="data-val" id="tsla-val-usd">--</span>
-                <span class="converted-val" id="tsla-val-sgd">--</span>
-              </div>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Abs. Return</span>
-              <span class="data-val" id="tsla-abs">--</span>
-            </div>
+            <div class="data-row"><span class="data-label">Holdings</span><span class="data-val" id="tsla-qty">--</span></div>
+            <div class="data-row"><span class="data-label">Market Price</span><span class="data-val" id="tsla-price">--</span></div>
+            <div class="data-row"><span class="data-label">Total Value</span><div style="text-align:right"><span class="data-val" id="tsla-val-usd">--</span><span class="converted-val" id="tsla-val-sgd">--</span></div></div>
+            <div class="data-row"><span class="data-label">Abs. Return</span><span class="data-val" id="tsla-abs">--</span></div>
           </article>
 
           <article class="card">
-            <div class="card-header">
-              <span class="card-label">Index ETF</span>
-              <span class="yield-pill" id="voo-yield">--</span>
-            </div>
+            <div class="card-header"><span class="card-label">Index ETF</span><span class="yield-pill" id="voo-yield">--</span></div>
             <div class="card-title">S&P 500</div>
             <div class="card-ticker">VOO (NYSE)</div>
-            <div class="data-row">
-              <span class="data-label">Holdings</span>
-              <span class="data-val" id="voo-qty">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Market Price</span>
-              <span class="data-val" id="voo-price">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Total Value</span>
-              <div style="text-align:right">
-                <span class="data-val" id="voo-val-usd">--</span>
-                <span class="converted-val" id="voo-val-sgd">--</span>
-              </div>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Abs. Return</span>
-              <span class="data-val" id="voo-abs">--</span>
-            </div>
+            <div class="data-row"><span class="data-label">Holdings</span><span class="data-val" id="voo-qty">--</span></div>
+            <div class="data-row"><span class="data-label">Market Price</span><span class="data-val" id="voo-price">--</span></div>
+            <div class="data-row"><span class="data-label">Total Value</span><div style="text-align:right"><span class="data-val" id="voo-val-usd">--</span><span class="converted-val" id="voo-val-sgd">--</span></div></div>
+            <div class="data-row"><span class="data-label">Abs. Return</span><span class="data-val" id="voo-abs">--</span></div>
           </article>
 
           <article class="card">
-            <div class="card-header">
-              <span class="card-label">Tech ETF</span>
-              <span class="yield-pill" id="qqqm-yield">--</span>
-            </div>
+            <div class="card-header"><span class="card-label">Tech ETF</span><span class="yield-pill" id="qqqm-yield">--</span></div>
             <div class="card-title">Nasdaq 100</div>
             <div class="card-ticker">QQQM (NASDAQ)</div>
-            <div class="data-row">
-              <span class="data-label">Holdings</span>
-              <span class="data-val" id="qqqm-qty">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Market Price</span>
-              <span class="data-val" id="qqqm-price">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Total Value</span>
-              <div style="text-align:right">
-                <span class="data-val" id="qqqm-val-usd">--</span>
-                <span class="converted-val" id="qqqm-val-sgd">--</span>
-              </div>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Abs. Return</span>
-              <span class="data-val" id="qqqm-abs">--</span>
-            </div>
+            <div class="data-row"><span class="data-label">Holdings</span><span class="data-val" id="qqqm-qty">--</span></div>
+            <div class="data-row"><span class="data-label">Market Price</span><span class="data-val" id="qqqm-price">--</span></div>
+            <div class="data-row"><span class="data-label">Total Value</span><div style="text-align:right"><span class="data-val" id="qqqm-val-usd">--</span><span class="converted-val" id="qqqm-val-sgd">--</span></div></div>
+            <div class="data-row"><span class="data-label">Abs. Return</span><span class="data-val" id="qqqm-abs">--</span></div>
           </article>
         </div>
 
         <div class="grid grid-3" style="margin-top: 16px;">
           <article class="card">
-            <div class="card-header">
-              <span class="card-label">SG Bank</span>
-              <span class="yield-pill" id="ocbc-yield">--</span>
-            </div>
+            <div class="card-header"><span class="card-label">SG Bank</span><span class="yield-pill" id="ocbc-yield">--</span></div>
             <div class="card-title">OCBC Bank</div>
             <div class="card-ticker">O39.SI</div>
-            <div class="data-row">
-              <span class="data-label">Holdings</span>
-              <span class="data-val" id="ocbc-qty">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Market Price</span>
-              <span class="data-val" id="ocbc-price">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Total Value</span>
-              <span class="data-val" id="ocbc-val">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Abs. Return</span>
-              <span class="data-val" id="ocbc-abs">--</span>
-            </div>
+            <div class="data-row"><span class="data-label">Holdings</span><span class="data-val" id="ocbc-qty">--</span></div>
+            <div class="data-row"><span class="data-label">Market Price</span><span class="data-val" id="ocbc-price">--</span></div>
+            <div class="data-row"><span class="data-label">Total Value</span><span class="data-val" id="ocbc-val">--</span></div>
+            <div class="data-row"><span class="data-label">Abs. Return</span><span class="data-val" id="ocbc-abs">--</span></div>
           </article>
 
           <article class="card">
-            <div class="card-header">
-              <span class="card-label">SG Bank</span>
-              <span class="yield-pill" id="uob-yield">--</span>
-            </div>
+            <div class="card-header"><span class="card-label">SG Bank</span><span class="yield-pill" id="uob-yield">--</span></div>
             <div class="card-title">UOB Bank</div>
             <div class="card-ticker">U11.SI</div>
-            <div class="data-row">
-              <span class="data-label">Holdings</span>
-              <span class="data-val" id="uob-qty">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Market Price</span>
-              <span class="data-val" id="uob-price">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Total Value</span>
-              <span class="data-val" id="uob-val">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Abs. Return</span>
-              <span class="data-val" id="uob-abs">--</span>
-            </div>
+            <div class="data-row"><span class="data-label">Holdings</span><span class="data-val" id="uob-qty">--</span></div>
+            <div class="data-row"><span class="data-label">Market Price</span><span class="data-val" id="uob-price">--</span></div>
+            <div class="data-row"><span class="data-label">Total Value</span><span class="data-val" id="uob-val">--</span></div>
+            <div class="data-row"><span class="data-label">Abs. Return</span><span class="data-val" id="uob-abs">--</span></div>
           </article>
 
           <article class="card">
-            <div class="card-header">
-              <span class="card-label">SG Bank</span>
-              <span class="yield-pill" id="dbs-yield">--</span>
-            </div>
+            <div class="card-header"><span class="card-label">SG Bank</span><span class="yield-pill" id="dbs-yield">--</span></div>
             <div class="card-title">DBS Group</div>
             <div class="card-ticker">D05.SI</div>
-            <div class="data-row">
-              <span class="data-label">Holdings</span>
-              <span class="data-val" id="dbs-qty">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Market Price</span>
-              <span class="data-val" id="dbs-price">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Total Value</span>
-              <span class="data-val" id="dbs-val">--</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Abs. Return</span>
-              <span class="data-val" id="dbs-abs">--</span>
-            </div>
+            <div class="data-row"><span class="data-label">Holdings</span><span class="data-val" id="dbs-qty">--</span></div>
+            <div class="data-row"><span class="data-label">Market Price</span><span class="data-val" id="dbs-price">--</span></div>
+            <div class="data-row"><span class="data-label">Total Value</span><span class="data-val" id="dbs-val">--</span></div>
+            <div class="data-row"><span class="data-label">Abs. Return</span><span class="data-val" id="dbs-abs">--</span></div>
           </article>
         </div>
       </section>
@@ -642,45 +382,24 @@
         <h2>Cash & Government Securities</h2>
         <div class="grid grid-3">
           <article class="card">
-            <div class="card-header">
-              <span class="card-label">Bonus$aver</span>
-              <span class="yield-pill">4.55% PA</span>
-            </div>
+            <div class="card-header"><span class="card-label">Bonus$aver</span><span class="yield-pill">4.55% PA</span></div>
             <div class="card-title">Primary Cash</div>
             <div class="card-title" style="font-size:1.4rem; margin:10px 0;" id="cash1-display">--</div>
-            <ul class="card-list">
-               <li>Credit Salary > $3,000</li>
-               <li>Card Spend > $1,000</li>
-               <li>Invest $30k per 6 mo</li>
-            </ul>
+            <ul class="card-list"><li>Credit Salary > $3,000</li><li>Card Spend > $1,000</li><li>Invest $30k per 6 mo</li></ul>
           </article>
 
           <article class="card">
-            <div class="card-header">
-              <span class="card-label">E Saver</span>
-              <span class="yield-pill">1.65% PA</span>
-            </div>
+            <div class="card-header"><span class="card-label">E Saver</span><span class="yield-pill">1.65% PA</span></div>
             <div class="card-title">Reserves</div>
             <div class="card-title" style="font-size:1.4rem; margin:10px 0;" id="cash2-display">--</div>
-            <ul class="card-list">
-               <li>Wealth Holdings</li>
-               <li>Rotate out every 2 mo</li>
-               <li>Backup Capital Dry Powder</li>
-            </ul>
+            <ul class="card-list"><li>Wealth Holdings</li><li>Rotate out every 2 mo</li><li>Backup Capital Dry Powder</li></ul>
           </article>
 
           <article class="card cpf-card">
-            <div class="card-header">
-              <span class="card-label">CPF</span>
-              <span class="yield-pill">4.0% PA</span>
-            </div>
+            <div class="card-header"><span class="card-label">CPF</span><span class="yield-pill">4.0% PA</span></div>
             <div class="card-title">Special Account</div>
             <div class="card-title" style="font-size:1.4rem; margin:10px 0;" id="cpf-display">--</div>
-            <ul class="card-list">
-               <li>Risk Free Yield</li>
-               <li>Retirement Sum</li>
-               <li>Capital Preservation</li>
-            </ul>
+            <ul class="card-list"><li>Risk Free Yield</li><li>Retirement Sum</li><li>Capital Preservation</li></ul>
           </article>
         </div>
       </section>
@@ -688,7 +407,6 @@
       <section class="settings-section">
         <button class="btn-outline" onclick="openModal()">Adjust Portfolio Holdings</button>
       </section>
-
     </main>
 
     <div class="modal-overlay" id="holdingsModal">
@@ -709,7 +427,6 @@
         const overlay = document.getElementById('mobileOverlay');
         const hamburger = document.getElementById('hamburgerBtn');
         const body = document.body;
-
         if (window.innerWidth <= 768) {
           navLinks.classList.toggle('active');
           overlay.classList.toggle('active');
@@ -719,55 +436,91 @@
       }
 
       // 2. Configuration & Data
-      const USD_TO_SGD = 1.296; 
       const DATE_START = new Date("2021-11-12");
-      const DATE_NOW = new Date("2025-12-05");
-      const YEARS_HELD = Math.abs(DATE_NOW - DATE_START) / (1000 * 60 * 60 * 24 * 365.25); 
+      const DATE_NOW = new Date();
+      const YEARS_HELD = Math.abs(DATE_NOW - DATE_START) / (1000 * 60 * 60 * 24 * 365.25);
+      
+      // Default fallback in case API fails
+      let USD_TO_SGD = 1.34; 
 
+      // Added 'tickerId' to map to Yahoo Finance Symbols
       let holdings = {
-        tsla: { qty: 60, initial: 328.00, currency: 'USD', name: 'TSLA', type: 'equity' },
-        voo:  { qty: 12, initial: 430.00, currency: 'USD', name: 'S&P 500', type: 'equity' },
-        qqqm: { qty: 30, initial: 162.00, currency: 'USD', name: 'QQQM', type: 'equity' },
-        ocbc: { qty: 200, initial: 12.00, currency: 'SGD', name: 'OCBC', type: 'equity' },
-        uob:  { qty: 100, initial: 27.00, currency: 'SGD', name: 'UOB', type: 'equity' },
-        dbs:  { qty: 100, initial: 32.00, currency: 'SGD', name: 'DBS', type: 'equity' },
+        tsla: { qty: 60, initial: 328.00, currency: 'USD', name: 'TSLA', type: 'equity', tickerId: 'TSLA', price: 0 },
+        voo:  { qty: 12, initial: 430.00, currency: 'USD', name: 'S&P 500', type: 'equity', tickerId: 'VOO', price: 0 },
+        qqqm: { qty: 30, initial: 162.00, currency: 'USD', name: 'QQQM', type: 'equity', tickerId: 'QQQM', price: 0 },
+        ocbc: { qty: 200, initial: 12.00, currency: 'SGD', name: 'OCBC', type: 'equity', tickerId: 'O39.SI', price: 0 },
+        uob:  { qty: 100, initial: 27.00, currency: 'SGD', name: 'UOB', type: 'equity', tickerId: 'U11.SI', price: 0 },
+        dbs:  { qty: 100, initial: 32.00, currency: 'SGD', name: 'DBS', type: 'equity', tickerId: 'D05.SI', price: 0 },
         cash1: { qty: 1, price: 100000, initial: 100000, currency: 'SGD', name: 'Bonus$aver', type: 'cash' },
         cash2: { qty: 1, price: 70000, initial: 70000, currency: 'SGD', name: 'E Saver', type: 'cash' },
         cpf:   { qty: 1, price: 120000, initial: 120000, currency: 'SGD', name: 'CPF SA', type: 'cash' }
       };
 
-      // 3. Fetch "Live" Data
-      async function fetchMarketData() {
-        const marketPrices = {
-            tsla: 454.48,
-            voo: 629.30,
-            qqqm: 256.46,
-            ocbc: 18.91,
-            uob: 34.59,
-            dbs: 54.29
-        };
-        for (const [key, price] of Object.entries(marketPrices)) {
-            if(holdings[key]) holdings[key].price = price;
+      // 3. Yahoo Finance Data Fetcher (via CORS Proxy)
+      async function fetchYahooPrice(ticker) {
+        try {
+          // Yahoo V8 Chart API (unofficial) provides current regular market price
+          const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d`;
+          // Use AllOrigins CORS Proxy
+          const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+          
+          const response = await fetch(proxyUrl);
+          if (!response.ok) throw new Error('Network response was not ok');
+          
+          const data = await response.json();
+          const price = data.chart.result[0].meta.regularMarketPrice;
+          return price;
+        } catch (error) {
+          console.error(`Error fetching ${ticker}:`, error);
+          return null; // Return null to signal failure
         }
-        return true; 
       }
 
-      // 4. Historical Data
-      const histDates = [
-        'Jan 22', 'Apr 22', 'Jul 22', 'Oct 22', 
-        'Jan 23', 'Apr 23', 'Jul 23', 'Oct 23',
-        'Jan 24', 'Apr 24', 'Jul 24', 'Oct 24',
-        'Jan 25', 'Apr 25', 'Jul 25', 'Oct 25', 'Dec 25'
-      ];
-      
+      async function updateMarketData() {
+        const statusDot = document.getElementById('status-dot');
+        const fxDisplay = document.getElementById('fx-rate-display');
+
+        // 1. Fetch Forex (SGD=X is the yahoo ticker for USD to SGD)
+        const liveFx = await fetchYahooPrice('SGD=X');
+        if (liveFx) {
+          USD_TO_SGD = liveFx;
+          fxDisplay.textContent = liveFx.toFixed(3) + " (Live)";
+          statusDot.classList.add('live');
+        } else {
+          fxDisplay.textContent = USD_TO_SGD.toFixed(3) + " (Cached)";
+        }
+
+        // 2. Fetch Stock Prices in Parallel
+        const promises = Object.keys(holdings).map(async (key) => {
+          const asset = holdings[key];
+          if (asset.type === 'equity' && asset.tickerId) {
+             const livePrice = await fetchYahooPrice(asset.tickerId);
+             // Only update if we got a valid number, otherwise keep default/old
+             if (livePrice) {
+               holdings[key].price = livePrice;
+             } else {
+               // Fallback safety values if API fails completely
+               const fallbacks = { tsla: 450, voo: 620, qqqm: 250, ocbc: 18.5, uob: 34.0, dbs: 54.0 };
+               if(fallbacks[key]) holdings[key].price = fallbacks[key];
+             }
+          }
+        });
+
+        await Promise.all(promises);
+        return true;
+      }
+
+      // 4. Historical Data for Chart
+      const histDates = ['Jan 22', 'Jul 22', 'Jan 23', 'Jul 23', 'Jan 24', 'Jul 24', 'Jan 25', 'Jul 25', 'Dec 25'];
+      // Simplified historical points for demo
       const histPrices = {
-        tsla: [312, 290, 297, 227, 173, 164, 267, 200, 187, 183, 232, 249, 404, 282, 308, 456, 454],
-        voo:  [391, 359, 361, 339, 359, 369, 408, 374, 433, 452, 498, 516, 548, 506, 579, 627, 629],
-        qqqm: [145, 125, 126, 112, 119, 130, 155, 142, 169, 173, 192, 197, 214, 195, 232, 258, 256],
-        dbs:  [32.0, 30.8, 28.6, 31.1, 32.5, 29.8, 31.1, 29.8, 29.0, 34.9, 36.6, 38.6, 44.6, 42.4, 47.9, 53.9, 54.3],
-        uob:  [29.9, 29.9, 27.5, 27.7, 29.8, 28.2, 30.1, 27.0, 28.3, 30.4, 32.3, 32.1, 37.5, 34.6, 36.2, 34.6, 34.6],
-        ocbc: [11.4, 11.8, 11.5, 11.6, 12.2, 12.4, 12.6, 12.8, 13.0, 13.5, 14.2, 15.0, 14.0, 13.6, 16.0, 18.7, 18.9],
-        usdSgd: [1.35, 1.37, 1.39, 1.42, 1.34, 1.33, 1.35, 1.37, 1.33, 1.35, 1.35, 1.32, 1.37, 1.32, 1.28, 1.30, 1.296]
+        tsla: [312, 297, 173, 267, 187, 232, 404, 308, 454],
+        voo:  [391, 361, 359, 408, 433, 498, 548, 579, 629],
+        qqqm: [145, 126, 119, 155, 169, 192, 214, 232, 256],
+        dbs:  [32.0, 28.6, 32.5, 31.1, 29.0, 36.6, 44.6, 47.9, 54.3],
+        uob:  [29.9, 27.5, 29.8, 30.1, 28.3, 32.3, 37.5, 36.2, 34.6],
+        ocbc: [11.4, 11.5, 12.2, 12.6, 13.0, 14.2, 14.0, 16.0, 18.9],
+        usdSgd: [1.35, 1.39, 1.34, 1.35, 1.33, 1.35, 1.37, 1.28, 1.34]
       };
 
       function calculateHistoricalPortfolio() {
@@ -797,14 +550,15 @@
       const calculateReturns = (current, initial) => {
         if (current === initial || !initial) return { cagr: "--", abs: "--" };
         const cagrVal = (Math.pow((current / initial), (1 / YEARS_HELD)) - 1) * 100;
-        const cagrStr = (cagrVal > 0 ? '+' : '') + cagrVal.toFixed(1) + '% PA (CAGR)';
+        const cagrStr = (cagrVal > 0 ? '+' : '') + cagrVal.toFixed(1) + '% (CAGR)';
         const absVal = ((current - initial) / initial) * 100;
         const absStr = (absVal > 0 ? '+' : '') + absVal.toFixed(1) + '%';
         return { cagr: cagrStr, abs: absStr };
       };
 
       async function renderDashboard() {
-        await fetchMarketData();
+        // Wait for data fetch
+        await updateMarketData();
 
         let totalPortfolioValueSGD = 0;
         const chartLabels = [];
@@ -819,7 +573,7 @@
             currentValueSGD = currentValueRaw * USD_TO_SGD;
             if(document.getElementById(`${key}-val-usd`)) {
               document.getElementById(`${key}-qty`).textContent = asset.qty + " Units";
-              document.getElementById(`${key}-price`).textContent = "$" + asset.price + " USD";
+              document.getElementById(`${key}-price`).textContent = "$" + asset.price.toFixed(2) + " USD";
               document.getElementById(`${key}-val-usd`).textContent = formatCurrency(currentValueRaw, 'USD');
               document.getElementById(`${key}-val-sgd`).textContent = `≈ ${formatCurrency(currentValueSGD, 'SGD')}`;
               
@@ -835,7 +589,7 @@
             } else {
                 if(document.getElementById(`${key}-val`)) {
                     document.getElementById(`${key}-qty`).textContent = asset.qty + " Units";
-                    document.getElementById(`${key}-price`).textContent = "$" + asset.price + " SGD";
+                    document.getElementById(`${key}-price`).textContent = "$" + asset.price.toFixed(2) + " SGD";
                     document.getElementById(`${key}-val`).textContent = formatCurrency(currentValueRaw, 'SGD');
                     
                     const returns = calculateReturns(asset.price, asset.initial);
@@ -852,11 +606,10 @@
 
         document.getElementById('total-wealth-display').textContent = formatCurrency(totalPortfolioValueSGD, 'SGD');
 
-        // Chart.js: Determine legend position based on screen width
+        // Charts Logic (Doughnut)
         const isMobile = window.innerWidth <= 768;
         const legendPosition = isMobile ? 'bottom' : 'right';
 
-        // Doughnut Chart
         const ctx = document.getElementById('portfolioChart').getContext('2d');
         if (myChart) { myChart.destroy(); }
         myChart = new Chart(ctx, {
@@ -875,18 +628,14 @@
             maintainAspectRatio: false,
             cutout: '60%',
             plugins: {
-              legend: { 
-                position: legendPosition, 
-                labels: { usePointStyle: true, font: { family: 'system-ui' }, padding: 15 } 
-              }
+              legend: { position: legendPosition, labels: { usePointStyle: true, font: { family: 'system-ui' }, padding: 15 } }
             }
           }
         });
 
-        // Line Chart (Growth)
+        // Charts Logic (Line)
         const ctxLine = document.getElementById('growthChart').getContext('2d');
         if (lineChart) { lineChart.destroy(); }
-        
         const historicalValues = calculateHistoricalPortfolio();
         
         lineChart = new Chart(ctxLine, {
@@ -894,7 +643,7 @@
             data: {
                 labels: histDates,
                 datasets: [{
-                    label: 'Total Portfolio Value (SGD)',
+                    label: 'Portfolio Value (SGD)',
                     data: historicalValues,
                     borderColor: '#bfa27a',
                     backgroundColor: 'rgba(191, 162, 122, 0.1)',
@@ -908,33 +657,15 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    y: {
-                        beginAtZero: false,
-                        grid: { color: 'rgba(0,0,0,0.05)' },
-                        ticks: { font: { family: 'system-ui', size: 10 } }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { family: 'system-ui', size: 10 } }
-                    }
+                    y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { family: 'system-ui', size: 10 } } },
+                    x: { grid: { display: false }, ticks: { font: { family: 'system-ui', size: 10 } } }
                 },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            label: function(context) {
-                                return formatCurrency(context.raw, 'SGD');
-                            }
-                        }
-                    }
-                }
+                plugins: { legend: { display: false } }
             }
         });
       }
 
-      // 6. Modal Logic
+      // Modal Functions
       function openModal() {
         const container = document.getElementById('modal-inputs');
         container.innerHTML = ''; 
@@ -947,7 +678,6 @@
             container.appendChild(div);
         }
         document.getElementById('holdingsModal').style.display = 'flex';
-        // Prevent body scrolling when modal is open
         document.body.style.overflow = 'hidden';
       }
 
@@ -966,11 +696,9 @@
         renderDashboard(); 
       }
 
-      // Re-render chart on resize to adjust legend position
-      window.addEventListener('resize', () => {
-          renderDashboard();
-      });
-
+      window.addEventListener('resize', () => { renderDashboard(); });
+      
+      // Initial Load
       renderDashboard();
     </script>
   </body>
