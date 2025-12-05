@@ -17,6 +17,7 @@
         --card: #ffffff;
         --positive: #2d5e38;
         --cpf-green: #91C799;
+        --header-height: 70px;
       }
       * {
         box-sizing: border-box;
@@ -27,55 +28,119 @@
         background: var(--bg);
         color: var(--text);
         line-height: 1.6;
+        /* Prevent scroll when mobile menu is open */
+        overflow-x: hidden;
+      }
+      body.nav-open {
+        overflow: hidden;
       }
       a {
         text-decoration: none;
         color: inherit;
+        transition: color 0.2s;
       }
+      a:hover { color: var(--accent-dark); }
+
+      /* --- HEADER & NAV --- */
       header {
         position: sticky;
         top: 0;
-        z-index: 50;
+        z-index: 100;
         background: rgba(245, 244, 241, 0.95);
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(10px);
         border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        height: var(--header-height);
       }
       .nav {
         max-width: 1100px;
         margin: 0 auto;
-        padding: 14px 20px;
+        padding: 0 20px;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
       }
       .logo {
-        font-size: 1.2rem;
-        letter-spacing: 0.18em;
+        font-size: 1.1rem;
+        letter-spacing: 0.15em;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        z-index: 102; /* Above mobile menu overlay */
       }
       .logo span {
-        padding: 4px 8px;
+        padding: 3px 8px;
         border-radius: 999px;
         border: 1px solid var(--accent);
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         margin-left: 10px;
         color: var(--accent-dark);
+        white-space: nowrap;
       }
+
+      /* Desktop Nav Links */
       .nav-links {
         display: flex;
-        gap: 18px;
-        font-size: 0.9rem;
+        gap: 25px;
+        font-size: 0.85rem;
         text-transform: uppercase;
-        letter-spacing: 0.16em;
+        letter-spacing: 0.12em;
+        font-weight: 500;
       }
+
+      /* Hamburger Menu (Hidden on Desktop) */
+      .hamburger {
+        display: none;
+        cursor: pointer;
+        z-index: 102;
+        width: 30px;
+        height: 20px;
+        position: relative;
+        background: none;
+        border: none;
+      }
+      .hamburger span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: var(--text);
+        position: absolute;
+        transition: all 0.3s ease;
+      }
+      .hamburger span:nth-child(1) { top: 0; }
+      .hamburger span:nth-child(2) { top: 9px; }
+      .hamburger span:nth-child(3) { top: 18px; }
+
+      /* Active Hamburger State */
+      .hamburger.active span:nth-child(1) { transform: rotate(45deg); top: 9px; }
+      .hamburger.active span:nth-child(2) { opacity: 0; }
+      .hamburger.active span:nth-child(3) { transform: rotate(-45deg); top: 9px; }
+
+      /* Mobile Overlay */
+      .mobile-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100vh;
+        background: rgba(0,0,0,0.5);
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(2px);
+      }
+      .mobile-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      /* --- MAIN LAYOUT --- */
       main {
         max-width: 1100px;
         margin: 0 auto;
         padding: 24px 20px 60px;
       }
       
-      /* Sections */
       section { margin-top: 40px; }
       section h2 {
         font-size: 1rem;
@@ -93,7 +158,7 @@
         margin-left: 13px;
       }
 
-      /* Hero / Summary */
+      /* --- HERO SECTION --- */
       .hero {
         display: grid;
         grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
@@ -102,21 +167,21 @@
         padding: 28px 0 10px;
       }
       .hero-text h1 {
-        font-size: clamp(2rem, 3.5vw, 2.8rem);
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
         letter-spacing: 0.04em;
         text-transform: uppercase;
         margin-bottom: 8px;
-        line-height: 1.2;
+        line-height: 1.1;
       }
       .total-wealth {
-        font-size: 2.2rem;
+        font-size: clamp(2rem, 5vw, 2.4rem);
         font-weight: 700;
         color: var(--accent-dark);
-        margin-bottom: 16px;
+        margin-bottom: 10px;
         display: block;
       }
       .exchange-rate {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         color: var(--muted);
         background: #e9e8e5;
         padding: 4px 8px;
@@ -138,17 +203,9 @@
         max-height: 100%;
       }
 
-      /* Cards */
+      /* --- GRIDS & CARDS --- */
       .grid { display: grid; gap: 16px; }
-      @media (min-width: 768px) {
-        .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      }
-      @media (max-width: 768px) {
-        .hero { grid-template-columns: 1fr; }
-        .chart-container { order: -1; height: 300px;}
-      }
-
+      
       .card {
         background: var(--card);
         padding: 18px;
@@ -157,9 +214,12 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        transition: transform 0.2s ease;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
-      .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+      .card:hover { 
+        transform: translateY(-2px); 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06); 
+      }
       
       .card-header {
         display: flex;
@@ -168,7 +228,7 @@
         margin-bottom: 8px;
       }
       .card-label {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         text-transform: uppercase;
         letter-spacing: 0.16em;
         color: var(--muted);
@@ -196,7 +256,7 @@
       .data-row {
         display: flex;
         justify-content: space-between;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         margin-bottom: 6px;
         border-bottom: 1px dashed #eee;
         padding-bottom: 4px;
@@ -204,6 +264,7 @@
       .data-row:last-child { border-bottom: none; }
       .data-label { color: var(--muted); }
       .data-val { font-weight: 500; }
+      
       .tsla-card {
         background: linear-gradient(145deg, #ffffff 0%, #fcfbf9 100%);
         border: 1px solid var(--accent);
@@ -212,17 +273,16 @@
         border-left: 6px solid var(--cpf-green);
       }
       .converted-val {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         color: var(--muted);
         display: block;
         text-align: right;
       }
       
-      /* Lists inside cards */
       .card-list {
         list-style: none;
         margin-top: 10px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: var(--muted);
         border-top: 1px solid #f0f0f0;
         padding-top: 10px;
@@ -239,7 +299,7 @@
         left: 0;
       }
 
-      /* Settings Modal */
+      /* --- MODAL --- */
       .settings-section {
         margin-top: 60px;
         text-align: center;
@@ -250,7 +310,7 @@
         background: transparent;
         border: 1px solid var(--accent-dark);
         color: var(--accent-dark);
-        padding: 10px 20px;
+        padding: 12px 24px;
         border-radius: 999px;
         cursor: pointer;
         text-transform: uppercase;
@@ -269,7 +329,7 @@
         width: 100%; height: 100%;
         background: rgba(0,0,0,0.5);
         backdrop-filter: blur(4px);
-        z-index: 100;
+        z-index: 200;
         justify-content: center;
         align-items: center;
       }
@@ -280,6 +340,8 @@
         width: 90%;
         max-width: 500px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        max-height: 90vh;
+        overflow-y: auto;
       }
       .modal-title {
         font-size: 1.2rem;
@@ -298,11 +360,12 @@
         color: var(--muted);
       }
       .form-group input {
-        padding: 6px 10px;
+        padding: 8px 12px;
         border-radius: 6px;
         border: 1px solid #ccc;
         width: 120px;
         text-align: right;
+        font-size: 1rem;
       }
       .modal-actions {
         margin-top: 25px;
@@ -310,24 +373,75 @@
         justify-content: flex-end;
         gap: 10px;
       }
-      .btn-save { background: var(--accent-dark); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
-      .btn-cancel { background: #eee; color: #333; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+      .btn-save { background: var(--accent-dark); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+      .btn-cancel { background: #eee; color: #333; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+
+      /* --- MEDIA QUERIES (RESPONSIVENESS) --- */
+      @media (min-width: 769px) {
+        .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+
+      @media (max-width: 768px) {
+        .hamburger { display: block; }
+        
+        /* Navigation Drawer */
+        .nav-links {
+          position: fixed;
+          top: 0;
+          right: 0;
+          height: 100vh;
+          width: 75%;
+          max-width: 300px;
+          background: #fff;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 40px;
+          box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+          transform: translateX(100%);
+          transition: transform 0.3s ease-in-out;
+          z-index: 101;
+          font-size: 1.2rem;
+        }
+        .nav-links.active {
+          transform: translateX(0);
+        }
+
+        .hero { grid-template-columns: 1fr; gap: 20px; }
+        .chart-container { order: -1; height: 320px; }
+        
+        /* Make cards full width on mobile */
+        .grid-3, .grid-2 { grid-template-columns: 1fr; }
+        
+        main { padding: 20px 15px 50px; }
+      }
     </style>
   </head>
   <body>
+    <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+
     <header>
       <nav class="nav">
         <div class="logo">
           PORTFOLIO <span>Live Dashboard</span>
         </div>
-        <div class="nav-links">
-          <a href="#summary">Summary</a>
-          <a href="#growth">Growth</a>
-          <a href="#equities">Equities</a>
-          <a href="#cash">Cash</a>
+        
+        <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="nav-links" id="navLinks">
+          <a href="#summary" onclick="toggleMobileMenu()">Summary</a>
+          <a href="#growth" onclick="toggleMobileMenu()">Growth</a>
+          <a href="#equities" onclick="toggleMobileMenu()">Equities</a>
+          <a href="#cash" onclick="toggleMobileMenu()">Cash</a>
         </div>
       </nav>
     </header>
+
     <main>
       <section class="hero" id="summary">
         <div class="hero-text">
@@ -361,7 +475,7 @@
         </p>
         
         <div class="grid grid-3">
-          <article class="card">
+          <article class="card tsla-card">
             <div class="card-header">
               <span class="card-label">High Growth</span>
               <span class="yield-pill" id="tsla-yield">--</span>
@@ -589,7 +703,22 @@
     </div>
 
     <script>
-      // 1. Configuration & Data
+      // 1. Mobile Menu Logic
+      function toggleMobileMenu() {
+        const navLinks = document.getElementById('navLinks');
+        const overlay = document.getElementById('mobileOverlay');
+        const hamburger = document.getElementById('hamburgerBtn');
+        const body = document.body;
+
+        if (window.innerWidth <= 768) {
+          navLinks.classList.toggle('active');
+          overlay.classList.toggle('active');
+          hamburger.classList.toggle('active');
+          body.classList.toggle('nav-open');
+        }
+      }
+
+      // 2. Configuration & Data
       const USD_TO_SGD = 1.296; 
       const DATE_START = new Date("2021-11-12");
       const DATE_NOW = new Date("2025-12-05");
@@ -607,7 +736,7 @@
         cpf:   { qty: 1, price: 120000, initial: 120000, currency: 'SGD', name: 'CPF SA', type: 'cash' }
       };
 
-      // 2. Fetch "Live" Data
+      // 3. Fetch "Live" Data
       async function fetchMarketData() {
         const marketPrices = {
             tsla: 454.48,
@@ -623,8 +752,7 @@
         return true; 
       }
 
-      // 3. Historical Data (Quarterly approx prices)
-      // Dates: Jan 22, Apr 22, Jul 22, Oct 22, ...
+      // 4. Historical Data
       const histDates = [
         'Jan 22', 'Apr 22', 'Jul 22', 'Oct 22', 
         'Jan 23', 'Apr 23', 'Jul 23', 'Oct 23',
@@ -638,36 +766,25 @@
         qqqm: [145, 125, 126, 112, 119, 130, 155, 142, 169, 173, 192, 197, 214, 195, 232, 258, 256],
         dbs:  [32.0, 30.8, 28.6, 31.1, 32.5, 29.8, 31.1, 29.8, 29.0, 34.9, 36.6, 38.6, 44.6, 42.4, 47.9, 53.9, 54.3],
         uob:  [29.9, 29.9, 27.5, 27.7, 29.8, 28.2, 30.1, 27.0, 28.3, 30.4, 32.3, 32.1, 37.5, 34.6, 36.2, 34.6, 34.6],
-        ocbc: [11.4, 11.8, 11.5, 11.6, 12.2, 12.4, 12.6, 12.8, 13.0, 13.5, 14.2, 15.0, 14.0, 13.6, 16.0, 18.7, 18.9], // Est. Linear growth + annual pts
+        ocbc: [11.4, 11.8, 11.5, 11.6, 12.2, 12.4, 12.6, 12.8, 13.0, 13.5, 14.2, 15.0, 14.0, 13.6, 16.0, 18.7, 18.9],
         usdSgd: [1.35, 1.37, 1.39, 1.42, 1.34, 1.33, 1.35, 1.37, 1.33, 1.35, 1.35, 1.32, 1.37, 1.32, 1.28, 1.30, 1.296]
       };
 
       function calculateHistoricalPortfolio() {
-        // Assume Cash + CPF is constant baseline for "Investment Growth" visual
-        // In reality, this would vary, but for "Strategy Backtest" we hold it constant
         const fixedCash = holdings.cash1.price + holdings.cash2.price + holdings.cpf.price;
-        
         return histDates.map((date, i) => {
             let equityValue = 0;
-            
-            // TSLA
             equityValue += (holdings.tsla.qty * histPrices.tsla[i]) * histPrices.usdSgd[i];
-            // VOO
             equityValue += (holdings.voo.qty * histPrices.voo[i]) * histPrices.usdSgd[i];
-            // QQQM
             equityValue += (holdings.qqqm.qty * histPrices.qqqm[i]) * histPrices.usdSgd[i];
-            // DBS
             equityValue += (holdings.dbs.qty * histPrices.dbs[i]);
-            // UOB
             equityValue += (holdings.uob.qty * histPrices.uob[i]);
-            // OCBC
             equityValue += (holdings.ocbc.qty * histPrices.ocbc[i]);
-
             return equityValue + fixedCash;
         });
       }
 
-      // 4. Render Logic
+      // 5. Render Logic
       let myChart = null;
       let lineChart = null;
 
@@ -735,6 +852,10 @@
 
         document.getElementById('total-wealth-display').textContent = formatCurrency(totalPortfolioValueSGD, 'SGD');
 
+        // Chart.js: Determine legend position based on screen width
+        const isMobile = window.innerWidth <= 768;
+        const legendPosition = isMobile ? 'bottom' : 'right';
+
         // Doughnut Chart
         const ctx = document.getElementById('portfolioChart').getContext('2d');
         if (myChart) { myChart.destroy(); }
@@ -754,7 +875,10 @@
             maintainAspectRatio: false,
             cutout: '60%',
             plugins: {
-              legend: { position: 'right', labels: { usePointStyle: true, font: { family: 'system-ui' } } }
+              legend: { 
+                position: legendPosition, 
+                labels: { usePointStyle: true, font: { family: 'system-ui' }, padding: 15 } 
+              }
             }
           }
         });
@@ -810,7 +934,7 @@
         });
       }
 
-      // 5. Modal Logic
+      // 6. Modal Logic
       function openModal() {
         const container = document.getElementById('modal-inputs');
         container.innerHTML = ''; 
@@ -823,10 +947,13 @@
             container.appendChild(div);
         }
         document.getElementById('holdingsModal').style.display = 'flex';
+        // Prevent body scrolling when modal is open
+        document.body.style.overflow = 'hidden';
       }
 
       function closeModal() {
         document.getElementById('holdingsModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
       }
 
       function saveHoldings() {
@@ -838,6 +965,11 @@
         closeModal();
         renderDashboard(); 
       }
+
+      // Re-render chart on resize to adjust legend position
+      window.addEventListener('resize', () => {
+          renderDashboard();
+      });
 
       renderDashboard();
     </script>
