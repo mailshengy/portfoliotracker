@@ -200,6 +200,40 @@
       }
       canvas { max-width: 100%; max-height: 100%; }
 
+      /* --- GROWTH STATS --- */
+      .growth-stats-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      .stat-card {
+        background: #fff;
+        padding: 12px 18px;
+        border-radius: 10px;
+        border: 1px solid rgba(0,0,0,0.06);
+        min-width: 140px;
+        display: flex;
+        flex-direction: column;
+      }
+      .stat-card .label {
+        font-size: 0.7rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 4px;
+      }
+      .stat-card .value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--accent-dark);
+      }
+      .stat-card .sub {
+        font-size: 0.7rem;
+        color: var(--positive);
+        font-weight: 500;
+      }
+
       /* --- CARDS --- */
       .grid { display: grid; gap: 16px; }
       .card {
@@ -299,8 +333,22 @@
       </section>
 
       <section id="growth">
-        <h2>Portfolio Growth (Quarterly)</h2>
-        <p class="section-intro">Historical valuation of current assets from Jan 2022 to Dec 2025.</p>
+        <h2>Portfolio Growth</h2>
+        <p class="section-intro">Overall performance since Inception (Nov 2021). "Initial Cost" for Cash/CPF is assumed equal to current value.</p>
+        
+        <div class="growth-stats-row">
+            <div class="stat-card">
+                <span class="label">Total Abs. Return</span>
+                <span class="value" id="overall-abs-return">--%</span>
+                <span class="sub">Since Nov 2021</span>
+            </div>
+            <div class="stat-card">
+                <span class="label">Annual CAGR</span>
+                <span class="value" id="overall-cagr">--%</span>
+                <span class="sub">Compounded Yearly</span>
+            </div>
+        </div>
+
         <div class="chart-container" style="height: 300px;">
           <canvas id="growthChart"></canvas>
         </div>
@@ -440,6 +488,7 @@
       const DATE_START = new Date("2021-11-12");
       const DATE_NOW = new Date();
       const YEARS_HELD = Math.abs(DATE_NOW - DATE_START) / (1000 * 60 * 60 * 24 * 365.25);
+      const INITIAL_FX_RATE = 1.35; // Approx rate in Nov 2021 for Initial Cost Basis calculation
       
       // Default fallback in case API fails
       let USD_TO_SGD = 1.34; 
@@ -562,6 +611,7 @@
         await updateMarketData();
 
         let totalPortfolioValueSGD = 0;
+        let totalInitialCostSGD = 0;
         const chartLabels = [];
         const chartData = [];
         const chartColors = ['#9b825f', '#bfa27a', '#cab9a1', '#8a6b46', '#d5c6b3', '#e6dace', '#5c5c5c', '#9e9e9e', '#9AB39E'];
@@ -569,6 +619,19 @@
         for (const [key, asset] of Object.entries(holdings)) {
           let currentValueRaw = (asset.type === 'cash') ? asset.price : (asset.qty * asset.price);
           let currentValueSGD = currentValueRaw;
+          let initialValueSGD = 0;
+
+          // Calculate Initial Cost Basis in SGD (for Overall Growth stats)
+          if (asset.type === 'cash') {
+              initialValueSGD = asset.price; // Assume cash cost basis = current value
+          } else {
+              if (asset.currency === 'USD') {
+                  initialValueSGD = (asset.qty * asset.initial * INITIAL_FX_RATE);
+              } else {
+                  initialValueSGD = (asset.qty * asset.initial);
+              }
+          }
+          totalInitialCostSGD += initialValueSGD;
 
           if (asset.currency === 'USD') {
             currentValueSGD = currentValueRaw * USD_TO_SGD;
@@ -605,7 +668,20 @@
           chartData.push(currentValueSGD);
         }
 
+        // Update Total Wealth
         document.getElementById('total-wealth-display').textContent = formatCurrency(totalPortfolioValueSGD, 'SGD');
+
+        // Update Overall Growth Stats
+        const overallAbs = ((totalPortfolioValueSGD - totalInitialCostSGD) / totalInitialCostSGD) * 100;
+        const overallCagr = (Math.pow((totalPortfolioValueSGD / totalInitialCostSGD), (1 / YEARS_HELD)) - 1) * 100;
+
+        document.getElementById('overall-abs-return').textContent = (overallAbs > 0 ? '+' : '') + overallAbs.toFixed(2) + '%';
+        document.getElementById('overall-cagr').textContent = (overallCagr > 0 ? '+' : '') + overallCagr.toFixed(2) + '%';
+        
+        // Color coding for total stats
+        document.getElementById('overall-abs-return').style.color = overallAbs >= 0 ? 'var(--positive)' : 'red';
+        document.getElementById('overall-cagr').style.color = overallCagr >= 0 ? 'var(--positive)' : 'red';
+
 
         // Charts Logic (Doughnut)
         const isMobile = window.innerWidth <= 768;
