@@ -16,7 +16,7 @@
         --muted: #6e6e6e;
         --card: #ffffff;
         --positive: #2d5e38;
-        --cpf-green: #91C799;
+        --cpf-green: #9AB39E;
         --header-height: 70px;
       }
       * {
@@ -563,7 +563,7 @@
         let totalPortfolioValueSGD = 0;
         const chartLabels = [];
         const chartData = [];
-        const chartColors = ['#9b825f', '#bfa27a', '#cab9a1', '#8a6b46', '#d5c6b3', '#e6dace', '#5c5c5c', '#9e9e9e', '#91C799'];
+        const chartColors = ['#9b825f', '#bfa27a', '#cab9a1', '#8a6b46', '#d5c6b3', '#e6dace', '#5c5c5c', '#9e9e9e', '#9AB39E'];
 
         for (const [key, asset] of Object.entries(holdings)) {
           let currentValueRaw = (asset.type === 'cash') ? asset.price : (asset.qty * asset.price);
